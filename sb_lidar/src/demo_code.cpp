@@ -117,11 +117,11 @@ void callback(const sensor_msgs::LaserScanConstPtr& msg_ptr)
 		if (abs(y_total) < 5) // changed to 5 from 90
 			car_command.steering = 0;
 		else if (y_total < 110){
-			if   (y_total < 0) car_command.steering = -0.14;
-			else car_command.steering = 0.14;} //values are different because wheels arent same strength 
+			if   (y_total < 0) car_command.steering = -0.19;
+			else car_command.steering = 0.17;} //values are different because wheels arent same strength 
 		else if (y_total > 110){
-			if   (y_total < 0) car_command.steering = -0.14;
-			else car_command.steering = 0.14;}
+			if   (y_total < 0) car_command.steering = -0.19;
+			else car_command.steering = 0.17;}
 	
 		if ( car_command.throttle > 3500 )
 			car_command.throttle = SLOW_SPEED;
