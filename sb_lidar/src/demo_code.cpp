@@ -26,7 +26,7 @@ static const double IGNORE_ANGLE = PI; //pi radians = 180 degrees
 static const int    OFFSET_RAYS = 30;        // offset from central ray
 static const double REDZONE      = 0.5;
 static const double ORANGEZONE   = 1.0;
-static const double SLOW_SPEED	 = 0.1;
+static const double SLOW_SPEED	 = 0.5;
 static const double SPEED_LIMIT  = 0.3;
 
 //ros related constants
@@ -92,7 +92,7 @@ void callback(const sensor_msgs::LaserScanConstPtr& msg_ptr)
 		ROS_FATAL("No valid rays found");
 		danger = 0;
 		car_command.throttle =  SPEED_LIMIT;
-		car_command.steering =   0;
+		car_command.steering =   0.5; //change back to 0
 		car_command.priority = 0.5;
 		//return;
 	}
@@ -117,15 +117,15 @@ void callback(const sensor_msgs::LaserScanConstPtr& msg_ptr)
 		if (abs(y_total) < 5) // changed to 5 from 90
 			car_command.steering = 0;
 		else if (y_total < 110){
-			if   (y_total < 0) car_command.steering = -0.19;
-			else car_command.steering = 0.17;} //values are different because wheels arent same strength 
+			if   (y_total < 0) car_command.steering = -0.5;
+			else car_command.steering = 0.5;} //values are different because wheels arent same strength 
 		else if (y_total > 110){
-			if   (y_total < 0) car_command.steering = -0.19;
-			else car_command.steering = 0.17;}
+			if   (y_total < 0) car_command.steering = -0.5;
+			else car_command.steering = 0.5;}
 	
 		if ( car_command.throttle > 3500 )
 			car_command.throttle = SLOW_SPEED;
-		car_command.throttle = clamp(car_command.throttle, SPEED_LIMIT);
+		//car_command.throttle = clamp(car_command.throttle, SPEED_LIMIT);
 		car_command.steering = clamp(car_command.steering, 1);
 		
 		ROS_INFO("x_total:  %f\t y_total:  %f\tthrottle: %f\t steering: %f", x_total, y_total, car_command.throttle, car_command.steering);	

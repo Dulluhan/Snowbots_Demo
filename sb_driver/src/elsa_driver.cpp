@@ -139,7 +139,8 @@ int main(int argc, char** argv)
 			ss << (char)IDENTIFIER_BYTE << "125125125";
 	    } else {  
             //use carCommand and turretCommand
-			ss << (char)IDENTIFIER_BYTE<< twist_y[0] << twist_y[1] << twist_y[2] << twist_z[0] << twist_z[1] << twist_z[2];
+			ss << (char)IDENTIFIER_BYTE<< twist_y[0] << twist_y[1] << twist_y[2] << twist_z[0] << twist_z[1] << twist_z[2] << "125";
+//ss << (char)IDENTIFIER_BYTE<< 180 << 180 << 180 << twist_z[0] << twist_z[1] << twist_z[2];
 
 	    }
 			cout << ss.str() << endl;
@@ -150,7 +151,7 @@ int main(int argc, char** argv)
 	    //publish data
 			char test[24];
 	 link.readData(24, test);
-			cout << test;
+			cout << "test is" << test;
 	    processData(test,state);//" -19,      0,      0."
 	    robot_state.publish(state);
      
@@ -208,7 +209,7 @@ int main(int argc, char** argv)
 	    link.clearBuffer();
 	    
 	    //log and loop
-	   // ROS_INFO("%i,%i,%i",mech.twist_x, mech.twist_y, mech.twist_z);
+	    //ROS_INFO("%i,%i,%i",mech.twist_x, mech.twist_y, mech.twist_z);
 	    spinOnce();
 		loop_rate.sleep();
 	}
@@ -273,7 +274,8 @@ void car_command_callback(const geometry_msgs::TwistConstPtr& msg_ptr)
 
 
 	ROS_INFO("car command has been called");
-	mech.twist_y = (msg_ptr->linear.y) * 125+125; 
+mech.twist_y=170;
+	//mech.twist_y = (msg_ptr->linear.y) * 125+125; 
 	mech.twist_z = -(msg_ptr->angular.z) * 125+125;
     cout<<"callback function running"<<endl;
     cout<< "linear y:"<<msg_ptr->linear.y <<endl;
