@@ -26,9 +26,9 @@ static const double IGNORE_ANGLE = PI; //pi radians = 180 degrees
 static const int    OFFSET_RAYS = 30;        // offset from central ray
 static const double REDZONE      = 0.5;
 static const double ORANGEZONE   = 1.0;
-static const double SLOW_SPEED	 = 0.5;
-static const double SPEED_LIMIT  = 0.3;
-
+static const double SLOW_SPEED	 = 0.0;
+static const double SPEED_LIMIT  = 0.0;
+static const double TURN = 0.25;
 //ros related constants
 static const string NODE_NAME       = "lidar_node";
 
@@ -92,7 +92,7 @@ void callback(const sensor_msgs::LaserScanConstPtr& msg_ptr)
 		ROS_FATAL("No valid rays found");
 		danger = 0;
 		car_command.throttle =  SPEED_LIMIT;
-		car_command.steering =   0.5; //change back to 0
+		car_command.steering =   0; //change back to 0
 		car_command.priority = 0.5;
 		//return;
 	}
@@ -110,18 +110,18 @@ void callback(const sensor_msgs::LaserScanConstPtr& msg_ptr)
 		
 	*/	
 		if (danger == 0)		
-			car_command.throttle =  -1 * x_total / valid_rays / 20;
+//			car_command.throttle =  -1 * x_total / valid_rays / 20;
 	//	car_command.steering =   1 * y_total / valid_rays / 20;
 		car_command.priority = 0.5;
 	
 		if (abs(y_total) < 5) // changed to 5 from 90
 			car_command.steering = 0;
 		else if (y_total < 110){
-			if   (y_total < 0) car_command.steering = -0.5;
-			else car_command.steering = 0.5;} //values are different because wheels arent same strength 
+			if   (y_total < 0) car_command.steering = -TURN;
+			else car_command.steering = (TURN + 0.02);} //values are different because wheels arent same strength 
 		else if (y_total > 110){
-			if   (y_total < 0) car_command.steering = -0.5;
-			else car_command.steering = 0.5;}
+			if   (y_total < 0) car_command.steering = -TURN;
+			else car_command.steering = (TURN + 0.02);}
 	
 		if ( car_command.throttle > 3500 )
 			car_command.throttle = SLOW_SPEED;
