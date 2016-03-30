@@ -126,7 +126,7 @@ int main(int argc, char** argv)
 	while(ok())
 	{
 		if (int((ros::Time::now() - begin).toSec()) >= 1) {
-			cout << counter << endl;
+	//		cout << counter << endl;
 			counter = 0;
 			begin = ros::Time::now();
 		}
@@ -138,11 +138,12 @@ int main(int argc, char** argv)
 			cout << "eStop on" << endl;
 			ss << (char)IDENTIFIER_BYTE << "125125125";
 	    } else {  
-//  twist_x[0] = '1'; twist_x[1] = '2'; twist_x[2] = '3';    
+ // twist_x[0] = '1'; twist_x[1] = '2'; twist_x[2] = '5';    
          //use carCommand and turretCommand
-			ss << (char)IDENTIFIER_BYTE<< twist_y[0] << twist_y[1] << twist_y[2] << twist_y[0] << twist_y[1] << twist_y[2] << twist_z[0] << twist_z[1] << twist_z[2]; 
+        cout << twist_z<< endl; 
+        ss << (char)IDENTIFIER_BYTE<< twist_x[0]<< twist_x[1] << twist_x[2]  << twist_y[0] << twist_y[1] << twist_y[2] << twist_z[0] << twist_z[1] << twist_z[2]; 
       }
-			cout << ss.str() << endl;
+			//cout << ss.str() << endl;
 	    link.writeData(ss.str(), 10); 
 	   char test[24];
 	 link.readData(24, test);
@@ -151,9 +152,9 @@ int main(int argc, char** argv)
 	    robot_state.publish(state);
      
 	    
-	    vth=th+state.compass*M_PI/180;
-	    th=state.compass*M_PI/180;//check units is degres what you need?
-	    vy=(state.RightVelo+state.LeftVelo)/2;
+//	    vth=th+state.compass*M_PI/180;
+	//    th=state.compass*M_PI/180;//check units is degres what you need?
+	  //  vy=(state.RightVelo+state.LeftVelo)/2;
 
 	   link.clearBuffer();
 	    
@@ -215,19 +216,19 @@ void processData(string data,sb_msgs::RobotState &state)
 //car_command_callback
 void car_command_callback(const geometry_msgs::TwistConstPtr& msg_ptr)
 {
-cout << "car_comman_callback" << endl << endl; 
-	cout << *msg_ptr << endl;	
-	cout << "y: " << msg_ptr->linear.y << "z: " << msg_ptr->angular.z << endl;
+//cout << "car_comman_callback" << endl << endl; 
+//	cout << *msg_ptr << endl;	
+//	cout << "y: " << msg_ptr->linear.y << "z: " << msg_ptr->angular.z << endl;
 	mech.twist_y = msg_ptr->linear.y * 125+125; 
-	mech.twist_z = -msg_ptr->angular.z * 125+125;
+	mech.twist_z = 128-(msg_ptr->angular.z * 100);
 
 
 //	ROS_INFO("car command has been called");
-	mech.twist_y = (msg_ptr->linear.y) * 125+125; 
-	mech.twist_z = -(msg_ptr->angular.z) * 125+125;
+	//mech.twist_y = (msg_ptr->linear.y) * 125+125; 
+//	mech.twist_z = (double)-(msg_ptr->angular.z) * 125+125;
    // cout<<"callback function running"<<endl;
-   // cout<< "linear y:"<<msg_ptr->linear.y <<endl;
-  //  cout<< "angular z:"<< msg_ptr->angular.z <<endl;
+  //  cout<< "linear y:"<<msg_ptr->linear.y <<endl;
+//    cout<< "angular z:"<< msg_ptr->angular.z <<endl;
 //    cout<< "mech twist_y:"<<mech.twist_y<<endl;
 //	cout<< "mech twist_z:"<<mech.twist_z<<endl;
 	sprintf(twist_y,"%03d",mech.twist_y);
