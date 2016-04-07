@@ -220,7 +220,7 @@ void car_command_callback(const geometry_msgs::TwistConstPtr& msg_ptr)
 //	cout << *msg_ptr << endl;	
 //	cout << "y: " << msg_ptr->linear.y << "z: " << msg_ptr->angular.z << endl;
 	mech.twist_y = msg_ptr->linear.y * 125+125; 
-	mech.twist_z = 128-(msg_ptr->angular.z * 100);
+	mech.twist_z = 128-(msg_ptr->angular.z * 150);
 
 
 //	ROS_INFO("car command has been called");
